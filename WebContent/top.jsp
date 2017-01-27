@@ -21,7 +21,7 @@
 				<a href="signup">登録する</a>
 			</c:if>
 			<c:if test="${ not empty loginUser }">
-				<a href="./top">ホーム</a>
+				<a href="./">ホーム</a>
 				<a href="./settings">設定</a>
 				<a href="./logout">ログアウト</a>
 			</c:if>
@@ -37,7 +37,6 @@
 				</div>
 
 				<div class="account">
-					@
 					<c:out value="${loginUser.account }" />
 				</div>
 				<div class="account">
