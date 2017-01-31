@@ -41,10 +41,8 @@
 	<input name="email" value="${editUser.email}" id="email"/> <br />
 
 	<label for="description">説明</label><br />
-	<textarea name="description" cols="35" rows="5" id="description"><c:out value="${editUser.description}" /></textarea> <br />
-
-	<label for="icon">アイコン</label><br />
-	<input type="file" name="icon" id="icon"> <br />
+	<textarea name="description" cols="35" rows="5" id="description">
+	<c:out value="${editUser.description}" /></textarea> <br />
 
 	<input type="submit" value="登録" /> <br />
 	<a href="./">戻る</a>

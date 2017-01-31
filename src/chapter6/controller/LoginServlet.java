@@ -28,23 +28,35 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
 ServletException{
+
+
 		String accountOrEmail = request.getParameter("accountOrEmail");
 		String password = request.getParameter("password");
 
 		LoginService loginService = new LoginService();
 		User user = loginService.login(accountOrEmail, password);
 
+		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
+
+		User edit = new User();
+		edit.setAccountOrEmail(accountOrEmail);
+		edit.setPassword(password);
+
 		if (user != null){
 			session.setAttribute("loginUser", user);
 			response.sendRedirect("./");
 		}else{
-
-			List<String> messages = new ArrayList<String>();
 			messages.add("ログインに失敗しました。");
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("login");
-		}
-	}
-}
+			request.setAttribute("edit", edit);
 
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		}
+
+
+
+	}
+
+
+}

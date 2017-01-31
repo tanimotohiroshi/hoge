@@ -1,8 +1,6 @@
 package chapter6.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 import org.apache.commons.lang.StringUtils;
 
 import chapter6.beans.User;
 import chapter6.exception.NoRowsUpdatedRuntimeException;
 import chapter6.service.UserService;
-import chapter6.utils.StreamUtil;
 
 @WebServlet(urlPatterns = { "/settings" })
 @MultipartConfig(maxFileSize = 100000)
@@ -31,6 +27,9 @@ public class SettingsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+
+		/*ここの5行*/
+		/*ログインしている状態でその情報をセットしている*/
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
 
@@ -39,8 +38,26 @@ public class SettingsServlet extends HttpServlet {
 			session.setAttribute("editUser", editUser);
 		}
 
+		/*ここでsettings.jspに送ってる*/
 		request.getRequestDispatcher("settings.jsp").forward(request, response);
 	}
+
+
+	/*ここで入力された値をセット*/
+	private User getEditUser(HttpServletRequest request)
+			throws IOException, ServletException {
+
+		HttpSession session = request.getSession();
+		User editUser = (User) session.getAttribute("editUser");
+
+		editUser.setName(request.getParameter("name"));
+		editUser.setAccount(request.getParameter("account"));
+		editUser.setPassword(request.getParameter("password"));
+		editUser.setEmail(request.getParameter("email"));
+		editUser.setDescription(request.getParameter("description"));
+		return editUser;
+	}
+
 
 	@Override
 	protected void doPost(HttpServletRequest request,
@@ -74,41 +91,7 @@ public class SettingsServlet extends HttpServlet {
 		}
 	}
 
-	private User getEditUser(HttpServletRequest request)
-			throws IOException, ServletException {
 
-		HttpSession session = request.getSession();
-		User editUser = (User) session.getAttribute("editUser");
-
-		editUser.setName(request.getParameter("name"));
-		editUser.setAccount(request.getParameter("account"));
-		editUser.setPassword(request.getParameter("password"));
-		editUser.setEmail(request.getParameter("email"));
-		editUser.setDescription(request.getParameter("description"));
-		editUser.setIcon(getIcon(request));
-		return editUser;
-	}
-
-	private byte[] getIcon(HttpServletRequest request) throws IOException,
-			ServletException {
-
-		Part part = request.getPart("icon");
-		byte[] icon = null;
-		if (part.getSize() == 0) {
-			return icon;
-		}
-
-		InputStream inputStream = null;
-		try {
-			inputStream = part.getInputStream();
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			StreamUtil.copy(inputStream, baos);
-			icon = baos.toByteArray();
-			return icon;
-		} finally {
-			inputStream.close();
-		}
-	}
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 

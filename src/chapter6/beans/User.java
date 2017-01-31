@@ -1,19 +1,22 @@
 package chapter6.beans;
+
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
+
 
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
+	private String accountOrEmail;
 	private String account;
 	private String name;
 	private String email;
 	private String password;
 	private String description;
-	private byte[] icon;
-	private Date insertDate;
-	private Date updateDate;
+	private Timestamp insertDate;
+	private Timestamp updateDate;
+
 
 	public int getId() {
 		return id;
@@ -22,6 +25,15 @@ public class User implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public String getAccountOrEmail() {
+		return accountOrEmail;
+	}
+
+	public void setAccountOrEmail(String AccountOrEmail){
+		this.accountOrEmail = AccountOrEmail;
+	}
+
 
 	public String getAccount() {
 		return account;
@@ -38,6 +50,7 @@ public class User implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String getEmail() {
 		return email;
@@ -63,27 +76,20 @@ public class User implements Serializable {
 		this.description = description;
 	}
 
-	public byte[] getIcon() {
-		return icon;
-	}
 
-	public void setIcon(byte[] icon) {
-		this.icon = icon;
-	}
-
-	public Date getInsertDate() {
+	public Timestamp getInsertDate() {
 		return insertDate;
 	}
 
-	public void setInsertDate(Date insertDate) {
-		this.insertDate = insertDate;
+	public void setInsertDate(Timestamp insertDate2) {
+		this.insertDate = insertDate2;
 	}
 
-	public Date getUpdateDate() {
+	public Timestamp getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Date updateDate) {
+	public void setUpdateDate(Timestamp updateDate) {
 		this.updateDate = updateDate;
 	}
 

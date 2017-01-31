@@ -86,7 +86,6 @@ public class UserDao {
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("INSERT INTO user ( ");
-//			sql.append("id");
 			sql.append("account");
 			sql.append(", name");
 			sql.append(", email");
@@ -95,11 +94,10 @@ public class UserDao {
 			sql.append(", insert_date");
 			sql.append(", update_date");
 			sql.append(") VALUES (");
-//			sql.append("NEXT VALUE FOR my_seq "); // id
 			sql.append("?"); // account
 			sql.append(", ?"); // name
 			sql.append(", ?"); // email
-			sql.append(", ?"); // password
+			sql.append(", ? "); // password
 			sql.append(", ?"); // description
 			sql.append(", CURRENT_TIMESTAMP"); // insert_date
 			sql.append(", CURRENT_TIMESTAMP"); // update_date
@@ -112,11 +110,6 @@ public class UserDao {
 			ps.setString(3, user.getEmail());
 			ps.setString(4, user.getPassword());
 			ps.setString(5, user.getDescription());
-//			if (user.getIcon() == null) {
-//				ps.setObject(5, null);
-//			} else {
-//				ps.setBinaryStream(5, new ByteArrayInputStream(user.getIcon()));
-//			}
 
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -131,17 +124,18 @@ public class UserDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("UPDATE user SET");
+			sql.append("update user set");
 			sql.append("  account = ?");
 			sql.append(", name = ?");
 			sql.append(", email = ?");
 			sql.append(", password = ?");
 			sql.append(", description = ?");
-			sql.append(", update_date = CURRENT_TIMESTAMP");
+			sql.append(", update_date = now()");
 			sql.append(" WHERE");
-			sql.append(" id = ?");
-			sql.append(" AND");
+			sql.append(" id = ? ");
+			sql.append("AND");
 			sql.append(" update_date = ?");
+
 
 			ps = connection.prepareStatement(sql.toString());
 
@@ -150,16 +144,8 @@ public class UserDao {
 			ps.setString(3, user.getEmail());
 			ps.setString(4, user.getPassword());
 			ps.setString(5, user.getDescription());
-//			if (user.getIcon() == null) {
-//				ps.setInt(6, user.getId());
-//				ps.setTimestamp(7,
-//						new Timestamp(user.getUpdateDate().getTime()));
-//			} else {
-//				ps.setBinaryStream(6, new ByteArrayInputStream(user.getIcon()));
-//				ps.setInt(7, user.getId());
-//				ps.setTimestamp(8,
-//						new Timestamp(user.getUpdateDate().getTime()));
-//			}
+			ps.setInt(6, user.getId());
+			ps.setTimestamp(7, user.getUpdateDate());
 
 			int count = ps.executeUpdate();
 			if (count == 0) {

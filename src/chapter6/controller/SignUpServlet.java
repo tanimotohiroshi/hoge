@@ -1,4 +1,5 @@
 package chapter6.controller;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,11 @@ public class SignUpServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
 ServletException {
+
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
 	}
+
+
 
 	@Override
 	protected void doPost(HttpServletRequest request,
@@ -33,14 +37,16 @@ ServletException{
 
 		List<String> messages = new ArrayList<>();
 		HttpSession session = request.getSession();
+
+		User user = new User();
+		user.setName(request.getParameter("name"));
+		user.setAccount(request.getParameter("account"));
+		user.setPassword(request.getParameter("password"));
+		user.setEmail(request.getParameter("email"));
+		user.setDescription(request.getParameter("description"));
+
 		if(isValid(request, messages) == true){
 
-			User user = new User();
-			user.setName(request.getParameter("name"));
-			user.setAccount(request.getParameter("account"));
-			user.setPassword(request.getParameter("password"));
-			user.setEmail(request.getParameter("email"));
-			user.setDescription(request.getParameter("description"));
 
 			new UserService().register(user);
 
@@ -48,10 +54,13 @@ ServletException{
 
 		}else{
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("signup");
+			request.setAttribute("editSignUpUser", user);
+			request.getRequestDispatcher("signup.jsp").forward(request, response);
+
 
 		}
 	}
+
 
 	private boolean isValid(HttpServletRequest request, List<String>messages) {
 		String account = request.getParameter("account");
